@@ -16,7 +16,8 @@ export default (state = initialState,action ) => {
         case "ADD": {
             return {
                 ...state,
-                todos: [...state.todos,{title: action.title,
+                todos: [...state.todos,{
+                    title: action.title,
                     id: state.todos.length ? state.todos[state.todos.length - 1].id + 1 : 1}]
             }
         }
@@ -42,20 +43,50 @@ export default (state = initialState,action ) => {
                 
             }
         }
-        case 'CHANGE': {
+        case 'EDIT': {
             return {
                 ...state,
                 todos: state.todos.map((item) => {
                     if(item.id === action.id){
                         return {
-                            ...item, isChange: !item.isChange
+                            ...item,
+                            title:action.title,
+                            change: !item.change
                         }
-                    }console.log("changed")
-                    return item
-                }),
-                
+                    }else{
+                            return item
+                        }
+                })
             }
-            
+        }
+        case 'EDIT2': {
+            return {
+                ...state,
+                todos: state.todos.map((item) => {
+                    if(item.id === action.id){
+                        return {
+                            ...item,
+                            change: !item.change
+                        }
+                    }else{
+                        return item
+                    }
+                })
+            }
+        }
+        case 'CHECK': {
+            return {
+                ...state,
+                todos: state.todos.map((item) => {
+                    if(item.id === action.id){
+                    }else{
+                        return item
+                        
+                    }
+                    
+                })
+            }
+
         }
             
         default: return state
@@ -77,8 +108,17 @@ export const importantTodo = (id) => {
         return dispatch({type: "IMPORTANT" , id})
     }
 }
-export const changeTodo = ( title) => {
+export const editTask = (id,title,change) => {
     return (dispatch) => {
-        return dispatch({type: "CHANGE" , title})
+        if(change){
+            return dispatch({type: 'EDIT', id, title})
+        }else{
+            return dispatch({type: "EDIT2", id})
+        }
+    }
+}
+export const checkTask = (title) => {
+    return (dispatch) => {
+        return dispatch ({type: 'CHECK', title})
     }
 }
